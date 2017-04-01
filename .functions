@@ -1,11 +1,28 @@
 #!/usr/bin/env bash
 
-export UPDATE="update" # `shellcheck`: workaround for line 11
+export UPDATE="update" # `shellcheck`: workaround for line 30
 export UPGRADE="full-upgrade"
+
+function cache() {
+  if [ "$(which apt)" ]; then
+    sudo apt autoremove
+    for kernel in $(dpkg -l *linux-image-[0-9]* | grep ii | grep -v "$(uname -r)" | awk '{printf "%s ",$2}') # Remove old Linux kernels
+    do
+      sudo apt purge $kernel
+    done
+  fi
+  if [ $NVM_DIR ]; then
+    nvm cache clear
+    for node in $(nvm ls --no-colors | grep -vE '$(nvm current)|default|lts' | awk '{printf "%s ",$1}' | sed 's/->//g') # nvm doesn't let you (un)install in one fell swoop for some reason
+    do
+      nvm uninstall $node # delete Node.js versions not in use
+    done
+  fi
+}
 
 function update() {
   if [ "$(uname)" == "Darwin" ]; then
-    sudo softwareupdate -ia # fetch latest updates from the Mac App Store
+    sudo softwareupdate -ia # fetch and install latest updates from the Mac App Store
   elif [ "$(which apt)" ]; then
     echo ""
     echo "Running APT..."
@@ -33,4 +50,5 @@ function update() {
   fi
 }
 
+export -f cache
 export -f update
