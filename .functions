@@ -5,11 +5,11 @@ export UPGRADE="full-upgrade"
 
 function cache() {
   if [ "$(which apt)" ]; then
-    sudo apt autoremove
     for kernel in $(dpkg -l *linux-image-[0-9]* | grep ii | grep -v "$(uname -r)" | awk '{printf "%s ",$2}') # Remove old Linux kernels
     do
       sudo apt purge $kernel
     done
+    sudo apt autoremove
   fi
   if [ $NVM_DIR ]; then
     nvm cache clear
@@ -34,7 +34,7 @@ function update() {
     echo ""
     echo "Running nvm..."
     echo ""
-    nvm install stable # install the latest Node.js release
+    nvm install stable --reinstall-packages-from=node # install the latest Node.js release and migrate global packages to the new installation
   fi
   if [ "$(which npm)" ]; then
     echo ""
