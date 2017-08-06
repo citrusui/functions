@@ -36,12 +36,6 @@ function update() {
     echo ""
     nvm install stable --reinstall-packages-from=node # install the latest Node.js release and migrate global packages to the new installation
   fi
-  if [ "$(which npm)" ]; then
-    echo ""
-    echo "Running npm..."
-    echo ""
-    npm update -g # update all global Node modules
-  fi
   if [ "$(which apm)" ]; then
     echo ""
     echo "Running apm..."
