@@ -11,7 +11,7 @@ function cache() {
     done
     sudo apt autoremove
   fi
-  if [ $NVM_DIR ]; then
+  if [ -d ~/.nvm ]; then
     nvm cache clear
     for node in $(nvm ls --no-colors | grep -vE '$(nvm current)|default|lts' | awk '{printf "%s ",$1}' | sed 's/->//g') # nvm doesn't let you (un)install in one fell swoop for some reason
     do
@@ -30,7 +30,7 @@ function update() {
     sudo apt $UPDATE # refresh package lists
     sudo apt $UPGRADE # install updated packages
   fi
-  if [ $NVM_DIR ]; then
+  if [ -d ~/.nvm ]; then
     echo ""
     echo "Running nvm..."
     echo ""
