@@ -20,6 +20,21 @@ function cache() {
   fi
 }
 
+function nosleep() {
+  if [ "$(which gsettings)" ]; then
+    gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout >/dev/null
+    if [ $? -eq 0 ]; then
+      if [ "$(gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout)" == "900" ]; then
+        gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0 # never sleep on inactivity
+        echo "Sleep on inactivity disabled."
+      elif [ "$(gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout)" == "0" ]; then
+        gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 900 # sleep after 15 min of inactivity
+        echo "Sleep on inactivity set to 15 minutes."
+      fi
+    fi
+  fi
+}
+
 function update() {
   if [ "$(uname)" == "Darwin" ]; then
     sudo softwareupdate -ia # fetch and install latest updates from the Mac App Store
