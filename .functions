@@ -20,6 +20,20 @@ function cache() {
   fi
 }
 
+function darkmode() {
+cat <<EOM >$HOME/.config/gtk-3.0/settings.ini
+[Settings]
+gtk-application-prefer-dark-theme=1
+EOM
+}
+
+function lightmode() {
+cat <<EOM >$HOME/.config/gtk-3.0/settings.ini
+[Settings]
+gtk-application-prefer-dark-theme=0
+EOM
+}
+
 function nosleep() {
   if [ "$(which gsettings)" ]; then
     gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout >/dev/null
