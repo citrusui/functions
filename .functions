@@ -5,10 +5,6 @@ export UPGRADE="full-upgrade"
 
 function cache() {
   if [ "$(which apt)" ]; then
-    for kernel in $(dpkg -l *linux-image-[0-9]* | grep ii | grep -v "$(uname -r)" | awk '{printf "%s ",$2}') # Remove old Linux kernels
-    do
-      sudo apt purge $kernel
-    done
     sudo apt autoremove
   fi
   if [ -d ~/.nvm ]; then
